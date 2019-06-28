@@ -5,6 +5,7 @@ go-grpc-http-rest-microservice
 # references
 
 - [part 1](https://medium.com/@amsokol.com/tutorial-how-to-develop-go-grpc-microservice-with-http-rest-endpoint-middleware-kubernetes-daebb36a97e9)
+- [part 2](https://medium.com/@amsokol.com/tutorial-how-to-develop-go-grpc-microservice-with-http-rest-endpoint-middleware-kubernetes-af1fff81aeb2)
 
 - https://github.com/amsokol/go-grpc-http-rest-microservice-tutorial
 - https://github.com/golang-standards/project-layout

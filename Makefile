@@ -61,8 +61,13 @@ $(BIN)/protoc-gen-go: REPOSITORY=github.com/golang/protobuf/protoc-gen-go
 Protoc = $(BIN)/protoc
 $(BIN)/protoc: REPOSITORY="?"
 
-# Tests
+ProtocGenGrpcGateway = $(BIN)/protoc-gen-grpc-gateway
+$(BIN)/protoc-gen-grpc-gateway: REPOSITORY=github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 
+ProtocGenSwagger = $(BIN)/protoc-gen-swagger
+$(BIN)/protoc-gen-swagger: REPOSITORY=github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+
+# Tests
 TEST_TARGETS := test-default test-bench test-short test-verbose test-race
 .PHONY: $(TEST_TARGETS) test-xml check test tests
 test-bench:   ARGS=-run=__absolutelynothing__ -bench=. ## Run benchmarks
@@ -131,10 +136,13 @@ help:
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: gen
-gen: | $(ProtocGenGo)
+gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger)
 	$Q mkdir -p pkg/api/v1
-	$Q export PATH=$(ProtocGenGo):${PATH}
-	$(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/api/v1 todo-service.proto
+	$Q mkdir -p api/swagger/v1
+	$Q export PATH=$(BIN):${PATH}
+	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/api/v1 todo-service.proto
+	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 todo-service.proto
+	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 todo-service.proto
 
 .PHONY: version
 version:
@@ -142,8 +150,9 @@ version:
 
 .PHONY: server
 server:
-	$Q $(GO) run cmd/server/*.go -grpc-port=9090 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo
+	$Q $(GO) run cmd/server/*.go -grpc-port=9090 -http-port=8080 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo
 
 .PHONY: client
 client:
 	$Q $(GO) run cmd/client-grpc/main.go -server=localhost:9090
+	$Q $(GO) run cmd/client-rest/main.go -server=http://localhost:8080
