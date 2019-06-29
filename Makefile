@@ -59,13 +59,16 @@ ProtocGenGo = $(BIN)/protoc-gen-go
 $(BIN)/protoc-gen-go: REPOSITORY=github.com/golang/protobuf/protoc-gen-go
 
 Protoc = $(BIN)/protoc
-$(BIN)/protoc: REPOSITORY="?"
+$(BIN)/protoc: REPOSITORY=https://github.com/protocolbuffers/protobuf/releases
 
 ProtocGenGrpcGateway = $(BIN)/protoc-gen-grpc-gateway
 $(BIN)/protoc-gen-grpc-gateway: REPOSITORY=github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 
 ProtocGenSwagger = $(BIN)/protoc-gen-swagger
 $(BIN)/protoc-gen-swagger: REPOSITORY=github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+
+ProtocGenWeb = $(BIN)/protoc-gen-grpc-web
+$(BIN)/protoc-gen-grpc-web: REPOSITORY=https://github.com/grpc/grpc-web/releases
 
 # Tests
 TEST_TARGETS := test-default test-bench test-short test-verbose test-race
@@ -136,13 +139,16 @@ help:
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: gen
-gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger)
+gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb)
 	$Q mkdir -p pkg/api/v1
 	$Q mkdir -p api/swagger/v1
 	$Q export PATH=$(BIN):${PATH}
 	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/api/v1 todo-service.proto
 	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 todo-service.proto
 	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 todo-service.proto
+
+# $Q mkdir -p client
+# $Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --js_out=import_style=typescript:client --grpc-web_out=import_style=commonjs,mode=grpcwebtext:client todo-service.proto
 
 .PHONY: version
 version:
