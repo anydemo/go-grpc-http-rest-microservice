@@ -1,4 +1,4 @@
-PACKAGE  = newDB
+PACKAGE  = grpc-rest-svr
 DATE    ?= $(shell date +%FT%T%z)
 VERSION ?= $(shell git describe --tags --always --dirty --match=v* 2> /dev/null || \
 			cat $(CURDIR)/.version 2> /dev/null || echo v0)
@@ -18,11 +18,11 @@ export GO111MODULE=on
 export GOPROXY=${GOPROXY:-https://goproxy.cn}
 
 .PHONY: all
-all: fmt lint $(BIN) ; $(info $(M) building executable…) @ ## Build program binary
+all: fmt lint ; $(info $(M) building executable…) @ ## Build program binary
 	$Q $(GO) build \
 		-tags release \
 		-ldflags '-X $(PACKAGE)/cmd.Version=$(VERSION) -X $(PACKAGE)/cmd.BuildDate=$(DATE)' \
-		-o $(BIN)/$(PACKAGE) main.go
+		-o $(BIN)/$(PACKAGE) cmd/server/*.go
 
 .PHONY: demo
 demo: seqscan

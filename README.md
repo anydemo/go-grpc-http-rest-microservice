@@ -2,6 +2,11 @@
 
 go-grpc-http-rest-microservice
 
+# grafana
+
+- user:admin
+- password: admin
+
 # references
 
 - [part 1](https://medium.com/@amsokol.com/tutorial-how-to-develop-go-grpc-microservice-with-http-rest-endpoint-middleware-kubernetes-daebb36a97e9)
