@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/anydemo/go-grpc-http-rest-microservice/cmd/todo-server/cmd"
 	"os"
-
-	cmd "github.com/anydemo/go-grpc-http-rest-microservice/pkg/cmd/server"
 )
 
 func main() {

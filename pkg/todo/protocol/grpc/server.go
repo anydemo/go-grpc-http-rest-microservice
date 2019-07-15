@@ -8,9 +8,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/api/v1"
-	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/logger"
-	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/protocol/grpc/middleware"
+	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/api/v1"
+	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/logger"
+	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/protocol/grpc/middleware"
 )
 
 // RunServer runs gRPC service to publish ToDo service

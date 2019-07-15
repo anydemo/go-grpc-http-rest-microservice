@@ -133,12 +133,12 @@ help:
 
 .PHONY: gen
 gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb)
-	$Q mkdir -p pkg/api/v1
-	$Q mkdir -p api/swagger/v1
+	$Q mkdir -p pkg/todo/api/v1
+	$Q mkdir -p api/todo/swagger/v1
 	$Q export PATH=$(BIN):${PATH}
-	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/api/v1 todo-service.proto
-	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 todo-service.proto
-	$Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 todo-service.proto
+	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/todo/api/v1 todo-service.proto
+	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/todo/api/v1 todo-service.proto
+	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/todo/swagger/v1 todo-service.proto
 
 # $Q mkdir -p client
 # $Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --js_out=import_style=typescript:client --grpc-web_out=import_style=commonjs,mode=grpcwebtext:client todo-service.proto
@@ -148,10 +148,10 @@ version:
 	@echo $(VERSION)
 
 .PHONY: server
-server:
-	$Q $(GO) run cmd/server/*.go -grpc-port=9090 -http-port=8080 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo -log-level=-1 -log-time-format=2006-01-02T15:04:05.999999999Z07:00
+todo-server:
+	$Q $(GO) run cmd/todo-server/*.go -grpc-port=9090 -http-port=8080 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo -log-level=-1 -log-time-format=2006-01-02T15:04:05.999999999Z07:00
 
 .PHONY: client
-client:
-	$Q $(GO) run cmd/client-grpc/main.go -server=localhost:9090
-	$Q $(GO) run cmd/client-rest/main.go -server=http://localhost:8080
+todo-client:
+	$Q $(GO) run cmd/todo-client-grpc/main.go -server=localhost:9090
+	$Q $(GO) run cmd/todo-client-rest/main.go -server=http://localhost:8080
