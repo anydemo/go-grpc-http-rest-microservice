@@ -1,0 +1,460 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Weibo service",
+    "version": "1.0",
+    "contact": {
+      "name": "go-grpc-http-rest-microservice-tutorial project",
+      "url": "https://github.com/anydemo/go-grpc-http-rest-microservice",
+      "email": "exflyg@gmail.com"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/blog": {
+      "post": {
+        "summary": "Create new blog",
+        "operationId": "CreateBlog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateBlogResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateBlogRequest"
+            }
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    },
+    "/v1/blog/all": {
+      "get": {
+        "summary": "Read all blog",
+        "operationId": "ReadAllBlog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReadAllBlogResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    },
+    "/v1/blog/comment": {
+      "post": {
+        "summary": "Create new comment",
+        "operationId": "CreateComment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCommentResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCommentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    },
+    "/v1/blog/comment/all/{blog_id}": {
+      "get": {
+        "summary": "Read all comment",
+        "operationId": "ReadAllComment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReadAllCommentResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "blog_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    },
+    "/v1/blog/comment/{id}": {
+      "delete": {
+        "summary": "Delete comment",
+        "operationId": "DeleteComment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteCommentResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique string identifier of the comment to delete",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    },
+    "/v1/blog/{id}": {
+      "get": {
+        "summary": "Read blog",
+        "operationId": "ReadBlog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReadBlogResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique string identifier of the blog",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete blog",
+        "operationId": "DeleteBlog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteBlogResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique string identifier of the blog to delete",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BlogService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1Blog": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Unique string identifier of the blog"
+        },
+        "title": {
+          "type": "string",
+          "title": "Title of the blog"
+        },
+        "description": {
+          "type": "string",
+          "title": "Detail description of the blog"
+        },
+        "creator_id": {
+          "type": "string",
+          "title": "Creator"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "createdAt"
+        }
+      },
+      "title": "Task we have to do"
+    },
+    "v1Comment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Unique string identifier of the blog"
+        },
+        "content": {
+          "type": "string",
+          "title": "comment content"
+        },
+        "creator_id": {
+          "type": "string",
+          "title": "Creator"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "createdAt"
+        }
+      },
+      "title": "Task we have to do"
+    },
+    "v1CreateBlogRequest": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "blog": {
+          "$ref": "#/definitions/v1Blog",
+          "title": "Task entity to add"
+        }
+      },
+      "title": "Request data to create new blog"
+    },
+    "v1CreateBlogResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID of created task"
+        }
+      },
+      "title": "Contains data of created blog"
+    },
+    "v1CreateCommentRequest": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "comment": {
+          "$ref": "#/definitions/v1Comment",
+          "title": "Task entity to add"
+        }
+      },
+      "title": "Request data to create new blog"
+    },
+    "v1CreateCommentResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID of created task"
+        }
+      },
+      "title": "Contains data of created blog"
+    },
+    "v1DeleteBlogResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "deleted": {
+          "type": "string",
+          "format": "int64",
+          "title": "Contains number of entities have beed deleted\nEquals 1 in case of succesfull delete"
+        }
+      },
+      "title": "Contains status of delete operation"
+    },
+    "v1DeleteCommentResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "deleted": {
+          "type": "string",
+          "format": "int64",
+          "title": "Contains number of entities have beed deleted\nEquals 1 in case of succesfull delete"
+        }
+      },
+      "title": "Contains status of delete operation"
+    },
+    "v1ReadAllBlogResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "blogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Blog"
+          },
+          "title": "List of all blog"
+        }
+      },
+      "title": "Contains list of all blog"
+    },
+    "v1ReadAllCommentResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Comment"
+          },
+          "title": "List of all blog"
+        }
+      },
+      "title": "Contains list of all blog"
+    },
+    "v1ReadBlogResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "blogs": {
+          "$ref": "#/definitions/v1Blog",
+          "title": "Task entity read by ID"
+        }
+      },
+      "title": "Contains blog data specified in by ID request"
+    }
+  }
+}

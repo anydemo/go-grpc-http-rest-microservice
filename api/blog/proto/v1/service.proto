@@ -1,0 +1,241 @@
+syntax = "proto3";
+package v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Weibo service";
+		version: "1.0";
+		contact: {
+			name: "go-grpc-http-rest-microservice-tutorial project";
+			url: "https://github.com/anydemo/go-grpc-http-rest-microservice";
+			email: "exflyg@gmail.com";
+        };
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+// Task we have to do
+message Blog {
+    // Unique string identifier of the blog
+    string id = 1;
+
+    // Title of the blog
+    string title = 2;
+
+    // Detail description of the blog
+    string description = 3;
+
+    // Creator
+    string creator_id = 4;
+
+    // createdAt
+    google.protobuf.Timestamp created_at = 5;
+}
+
+// Request data to create new blog
+message CreateBlogRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity to add
+    Blog blog = 2;
+}
+
+// Contains data of created blog
+message CreateBlogResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // ID of created task
+    string id = 2;
+}
+
+// Request data to read blog
+message ReadBlogRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique string identifier of the blog
+    string id = 2;
+}
+
+// Contains blog data specified in by ID request
+message ReadBlogResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity read by ID
+    Blog blogs = 2;
+}
+
+// Request data to delete blog
+message DeleteBlogRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique string identifier of the blog to delete
+    string id = 2;
+}
+
+// Contains status of delete operation
+message DeleteBlogResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed deleted
+    // Equals 1 in case of succesfull delete
+    int64 deleted = 2;
+}
+
+// Request data to read all blog
+message ReadAllBlogRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+}
+
+// Contains list of all blog
+message ReadAllBlogResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // List of all blog
+    repeated Blog blogs = 2;
+}
+
+// Service to manage list of blog
+service BlogService {
+    // Read all blog
+    rpc ReadAllBlog(ReadAllBlogRequest) returns (ReadAllBlogResponse){
+        option (google.api.http) = {
+            get: "/v1/blog/all"
+        };
+    }
+
+    // Create new blog
+    rpc CreateBlog(CreateBlogRequest) returns (CreateBlogResponse){
+        option (google.api.http) = {
+            post: "/v1/blog"
+            body: "*"
+        };
+    }
+
+    // Read blog
+    rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse){
+        option (google.api.http) = {
+            get: "/v1/blog/{id}"
+        };
+    }
+
+    // Delete blog
+    rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse){
+        option (google.api.http) = {
+            delete: "/v1/blog/{id}"
+        };
+    }
+
+    // Read all comment
+    rpc ReadAllComment(ReadAllCommentRequest) returns (ReadAllCommentResponse){
+        option (google.api.http) = {
+            get: "/v1/blog/comment/all/{blog_id}"
+        };
+    }
+
+    // Create new comment
+    rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse){
+        option (google.api.http) = {
+            post: "/v1/blog/comment"
+            body: "*"
+        };
+    }
+
+    // Delete comment
+    rpc DeleteComment(DeleteCommentRequest) returns (DeleteCommentResponse){
+        option (google.api.http) = {
+            delete: "/v1/blog/comment/{id}"
+        };
+    }
+}
+
+// Task we have to do
+message Comment {
+    // Unique string identifier of the blog
+    string id = 1;
+
+    // comment content
+    string content = 2;
+
+    // Creator
+    string creator_id = 3;
+    // createdAt
+    google.protobuf.Timestamp created_at = 4;
+}
+
+// Request data to create new blog
+message CreateCommentRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity to add
+    Comment comment = 2;
+}
+
+// Contains data of created blog
+message CreateCommentResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // ID of created task
+    string id = 2;
+}
+
+// Request data to delete comment
+message DeleteCommentRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique string identifier of the comment to delete
+    string id = 2;
+}
+
+// Contains status of delete operation
+message DeleteCommentResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed deleted
+    // Equals 1 in case of succesfull delete
+    int64 deleted = 2;
+}
+
+// Request data to read all blog
+message ReadAllCommentRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+    string blog_id = 2;
+}
+
+// Contains list of all blog
+message ReadAllCommentResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // List of all blog
+    repeated Comment comments = 2;
+}

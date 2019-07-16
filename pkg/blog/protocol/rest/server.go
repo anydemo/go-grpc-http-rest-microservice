@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/anydemo/go-grpc-http-rest-microservice/logger"
-	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/api/v1"
+	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/blog/api/v1"
 	"github.com/anydemo/go-grpc-http-rest-microservice/protocol/rest/middleware"
 )
 
@@ -23,8 +23,8 @@ func RunServer(ctx context.Context, grpcPort, httpPort string) error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	if err := v1.RegisterToDoServiceHandlerFromEndpoint(ctx, mux, "localhost:"+grpcPort, opts); err != nil {
-		logger.Log.Fatal("failed to start todo HTTP gateway", zap.String("reason", err.Error()))
+	if err := v1.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "localhost:"+grpcPort, opts); err != nil {
+		logger.Log.Fatal("failed to start HTTP gateway", zap.String("reason", err.Error()))
 	}
 
 	srv := &http.Server{
@@ -48,6 +48,6 @@ func RunServer(ctx context.Context, grpcPort, httpPort string) error {
 		_ = srv.Shutdown(ctx)
 	}()
 
-	logger.Log.Info("starting todo HTTP/REST gateway...")
+	logger.Log.Info("starting blog HTTP/REST gateway...")
 	return srv.ListenAndServe()
 }
