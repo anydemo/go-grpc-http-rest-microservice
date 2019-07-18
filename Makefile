@@ -136,10 +136,18 @@ gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb
 	$Q mkdir -p pkg/todo/api/v1
 	$Q mkdir -p api/todo/swagger/v1
 	$Q export PATH=$(BIN):${PATH}
+	# gen todo
 	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/todo/api/v1 todo-service.proto
 	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/todo/api/v1 todo-service.proto
 	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/todo/swagger/v1 todo-service.proto
 
+	$Q mkdir -p pkg/blog/api/v1
+	$Q mkdir -p api/blog/swagger/v1
+	# gen blog
+	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/blog/api/v1 service.proto
+	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/blog/api/v1 service.proto
+	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/blog/swagger/v1 service.proto
+	
 # $Q mkdir -p client
 # $Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --js_out=import_style=typescript:client --grpc-web_out=import_style=commonjs,mode=grpcwebtext:client todo-service.proto
 
@@ -147,11 +155,19 @@ gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb
 version:
 	@echo $(VERSION)
 
-.PHONY: server
+.PHONY: todo-server
 todo-server:
 	$Q $(GO) run cmd/todo-server/*.go -grpc-port=9090 -http-port=8080 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo -log-level=-1 -log-time-format=2006-01-02T15:04:05.999999999Z07:00
 
-.PHONY: client
+.PHONY: todo-client
 todo-client:
 	$Q $(GO) run cmd/todo-client-grpc/main.go -server=localhost:9090
 	$Q $(GO) run cmd/todo-client-rest/main.go -server=http://localhost:8080
+
+.PHONY: blog-server
+blog-server:
+	$Q $(GO) run cmd/blog-server/*.go -grpc-port=9090 -http-port=8080 -db-addr=postgres://user:password@localhost:5432/weibo?sslmode=disable -log-level=-1 -log-time-format=2006-01-02T15:04:05.999999999Z07:00
+
+.PHONY: init
+init:
+	$Q docker-compose exec postgres psql -U user -d weibo -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
