@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/anydemo/go-grpc-http-rest-microservice/cmd/blog-server/cmd"
 	"os"
+
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	"github.com/anydemo/go-grpc-http-rest-microservice/cmd/blog-server/cmd"
 )
 
 func main() {

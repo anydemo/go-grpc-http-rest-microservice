@@ -170,4 +170,4 @@ blog-server:
 
 .PHONY: init
 init:
-	$Q docker-compose exec postgres psql -U user -d weibo
+	$Q docker-compose exec postgres psql -U user -d weibo -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'

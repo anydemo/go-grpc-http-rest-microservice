@@ -5,14 +5,11 @@ import (
 	"flag"
 	"fmt"
 
+	datasource "github.com/anydemo/go-grpc-http-rest-microservice/datasource/gorm"
 	"github.com/anydemo/go-grpc-http-rest-microservice/logger"
-	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/blog"
 	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/blog/protocol/grpc"
 	"github.com/anydemo/go-grpc-http-rest-microservice/pkg/blog/protocol/rest"
 	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/blog/service/v1"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 // Config is configuration for Server
@@ -63,18 +60,11 @@ func RunServer() error {
 		return fmt.Errorf("failed to initialize logger: %v", err)
 	}
 
-	db, err := gorm.Open(
-		"postgres", cfg.DatastoreAddr)
+	db, err := datasource.NewDB(&datasource.Config{Addr: cfg.DatastoreAddr})
 	if err != nil {
-		return fmt.Errorf("failed to open database: %v", err)
+		return fmt.Errorf("failed to init db %v", err)
 	}
 	defer db.Close()
-	// debug info for db
-	db.LogMode(true)
-	db.SingularTable(true)
-	// prevent update without where clause
-	db.BlockGlobalUpdate(true)
-	db.AutoMigrate(&blog.User{}, &blog.Blog{}, &blog.Comment{})
 
 	v1API := v1.NewBlogServiceServer(db)
 

@@ -33,13 +33,16 @@ type User struct {
 type Blog struct {
 	UUIDModel
 	Title     string
-	content   string
-	CreatorID string
+	Content   string
+	CreatorID uuid.UUID
+	Creator   *User     `gorm:"ForeignKey:CreatorID"`
+	Comments  []Comment `gorm:"many2many:comments;"`
 }
 
 // Comment comment model
 type Comment struct {
 	UUIDModel
 	Content   string
-	CreatorID string
+	CreatorID uuid.UUID
+	Creator   *User `gorm:"ForeignKey:CreatorID"`
 }
