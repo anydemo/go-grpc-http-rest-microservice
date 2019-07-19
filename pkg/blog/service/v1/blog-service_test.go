@@ -16,7 +16,7 @@ import (
 )
 
 func DB(t *testing.T) *gorm.DB {
-	cfg := &datasource.Config{Addr: "postgres://user:password@localhost:5432/weibo?sslmode=disable"}
+	cfg := &datasource.Config{Addr: "postgres://user:password@localhost:5433/weibo?sslmode=disable"}
 	db, err := datasource.NewDB(cfg)
 	require.NoError(t, err)
 	db.AutoMigrate(&blog.User{}, &blog.Blog{}, &blog.Comment{})

@@ -12,7 +12,7 @@ services:
   postgres:
     image: postgres:11-alpine
     volumes:
-      - ".dev/postgres:/var/lib/postgresql/data/pgdata"
+      - ".dev/postgres/psql:/var/lib/postgresql/data/pgdata"
     environment:
       PGDATA: "/var/lib/postgresql/data/pgdata"
       POSTGRES_USER: "user"
@@ -20,6 +20,42 @@ services:
       POSTGRES_DB: "weibo"
     ports:
       - 5432:5432
+
+  pg_master:
+    build: ./config/postgres/master
+    volumes:
+      - ".dev/postgres/master:/var/lib/postgresql/data/pgdata"
+    environment:
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: weibo
+      PG_REP_USER: rep
+      PG_REP_PASSWORD: password
+    networks:
+      default:
+        aliases:
+          - pg_cluster
+    ports:
+      - 5433:5432
+  pg_slave:
+    build: ./config/postgres/slave
+    volumes:
+      - ".dev/postgres/slave:/var/lib/postgresql/data/pgdata"
+    environment:
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: weibo
+      PG_REP_USER: rep
+      PG_REP_PASSWORD: password
+      PG_MASTER_HOST: pg_master
+    ports:
+      - 5434:5432
+    networks:
+      default:
+        aliases:
+          - pg_cluster
 
   db:
     image: mysql:5.7
