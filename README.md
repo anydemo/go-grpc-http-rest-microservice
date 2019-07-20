@@ -1,6 +1,10 @@
 # go-grpc-http-rest-microservice
 
-go-grpc-http-rest-microservice
+go-grpc-http-rest-microservice, discovery with consul, grpc-go, grpc-gateway, gorm, opentrace
+
+## todo
+
+- [x] discovery
 
 # grafana
 
