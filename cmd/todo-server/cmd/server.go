@@ -89,11 +89,12 @@ func RunServer() error {
 	defer db.Close()
 
 	v1API := v1.NewToDoServiceServer(db)
+	v1Healthz := v1.NewHealthzServer()
 
 	// run HTTP gateway
 	go func() {
 		_ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort)
 	}()
 
-	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
+	return grpc.RunServer(ctx, v1API, v1Healthz, cfg.GRPCPort)
 }

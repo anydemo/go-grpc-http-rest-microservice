@@ -13,7 +13,6 @@ Q = $(if $(filter 1,$V),,@)
 M = $(shell printf "\033[34;1m▶\033[0m")
 
 PKG ?= $(shell $(GO) list ./... | grep -v /vendor/)
-
 export GO111MODULE=on
 export GOPROXY=${GOPROXY:-https://goproxy.cn}
 
@@ -105,6 +104,9 @@ test-coverage: fmt lint test-coverage-tools ; $(info $(M) running coverage tests
 lint: | $(GOLINT) ; $(info $(M) running golint…) @ ## Run golint
 	$Q $(GOLINT) -set_exit_status $(PKGS)
 
+.PHONY: vendor
+vendor:
+	$(GO) mod vendor
 .PHONY: fmt
 fmt: ; $(info $(M) running gofmt…) @ ## Run gofmt on all source files
 	$Q $(GO) fmt ./...
@@ -147,7 +149,7 @@ gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb
 	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/blog/api/v1 service.proto
 	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/blog/api/v1 service.proto
 	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/blog/swagger/v1 service.proto
-	
+
 # $Q mkdir -p client
 # $Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --js_out=import_style=typescript:client --grpc-web_out=import_style=commonjs,mode=grpcwebtext:client todo-service.proto
 
@@ -155,14 +157,22 @@ gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb
 version:
 	@echo $(VERSION)
 
+.PHONY: discovery
+discovery:
+	docker run --rm --network host -p 8500:8500 consul:1.5
+
 .PHONY: todo-server
 todo-server:
 	$Q $(GO) run cmd/todo-server/*.go -grpc-port=9090 -http-port=8080 -db-host=localhost:3306 -db-user=root -db-password=password -db-schema=todo -log-level=-1 -log-time-format=2006-01-02T15:04:05.999999999Z07:00
 
 .PHONY: todo-client
 todo-client:
-	$Q $(GO) run cmd/todo-client-grpc/main.go -server=localhost:9090
+	$Q $(GO) run cmd/todo-client-grpc/main.go -server=127.0.0.1:9090
 	$Q $(GO) run cmd/todo-client-rest/main.go -server=http://localhost:8080
+
+.PHONY: todo-client-discovery
+todo-client-discovery:
+	$Q $(GO) run cmd/todo-client-grpc/main.go -server=consul://127.0.0.1:8500/todo_server_grpc
 
 .PHONY: blog-server
 blog-server:
@@ -172,3 +182,7 @@ blog-server:
 init:
 	$Q docker-compose exec postgres psql -U user -d weibo -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 	$Q docker-compose exec pg_master psql -U user -d weibo -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+
+.PHONY: consul
+consul: 
+	./bin/consul agent -server -data-dir .dev/consul/data -bootstrap -ui-dir=.dev/consul/data/consul-ui/dist -client=0.0.0.0 -syslog

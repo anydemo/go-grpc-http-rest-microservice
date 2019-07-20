@@ -9,6 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
 
+	"github.com/anydemo/go-grpc-http-rest-microservice/discovery"
 	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/api/v1"
 )
 
@@ -18,21 +19,22 @@ const (
 )
 
 func main() {
+	discovery.Init()
 	// get configuration
 	address := flag.String("server", "", "gRPC server in format host:port")
 	flag.Parse()
 
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(*address, grpc.WithInsecure())
+	conn, err := grpc.DialContext(ctx, *address, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithBalancerName("round_robin"))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
 	c := v1.NewToDoServiceClient(conn)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
 
 	t := time.Now().In(time.UTC)
 	reminder, _ := ptypes.TimestampProto(t)
