@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
+// RegisterToConsul register the service to consul
 func RegisterToConsul() {
 	discovery.RegitserService("localhost:8500", &discovery.ConsulService{
 		Name: "todo_server_grpc",

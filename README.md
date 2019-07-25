@@ -1,6 +1,6 @@
 # go-grpc-http-rest-microservice
 
-go-grpc-http-rest-microservice, discovery with consul, grpc-go, grpc-gateway, gorm, opentrace
+go-grpc-http-rest-microservice, discovery with consul, grpc-go, grpc-gateway, gorm, opentracing
 
 ## todo
 

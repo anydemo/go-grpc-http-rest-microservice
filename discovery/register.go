@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/consul/api"
 )
 
+// ConsulService Consul service
 type ConsulService struct {
 	IP   string
 	Port int
@@ -14,6 +15,7 @@ type ConsulService struct {
 	Name string
 }
 
+// RegitserService register service
 func RegitserService(ca string, cs *ConsulService) {
 
 	//register consul

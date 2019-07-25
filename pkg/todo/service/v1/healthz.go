@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
-//health
+// HealthImpl grpc health
 type HealthImpl struct{}
 
 // NewHealthzServer creates ToDo service
@@ -23,6 +23,7 @@ func (h *HealthImpl) Check(ctx context.Context, req *grpc_health_v1.HealthCheckR
 	}, nil
 }
 
+// Watch watch nil
 func (h *HealthImpl) Watch(req *grpc_health_v1.HealthCheckRequest, w grpc_health_v1.Health_WatchServer) error {
 	return nil
 }

@@ -24,6 +24,7 @@ var (
 	regexConsul, _ = regexp.Compile("^([A-z0-9.]+)(:[0-9]{1,5})?/([A-z_]+)$")
 )
 
+// Init register default discovery
 func Init() {
 	fmt.Printf("calling consul init\n")
 	resolver.Register(NewBuilder())
@@ -41,6 +42,7 @@ type consulResolver struct {
 	lastIndex            uint64
 }
 
+// NewBuilder build consul resolver.Builder
 func NewBuilder() resolver.Builder {
 	return &consulBuilder{}
 }
