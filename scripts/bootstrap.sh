@@ -23,3 +23,6 @@ unzip -u "$gateway_download_path" -d "$gateway_unpack_path"
 
 cp -r "$gateway_unpack_path/grpc-gateway-1.14.3/third_party/googleapis/google/"{api,rpc} "$third_party/google"
 cp -r "$gateway_unpack_path/grpc-gateway-1.14.3/protoc-gen-swagger/options/"*.proto "$third_party/protoc-gen-swagger/options/"
+
+wget -O "$output_dir/protoc-gen-grpc-web" -c https://github.com/grpc/grpc-web/releases/download/1.0.7/protoc-gen-grpc-web-1.0.7-darwin-x86_64
+chmod u+x "$output_dir/protoc-gen-grpc-web"
