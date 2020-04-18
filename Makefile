@@ -143,13 +143,6 @@ gen: | $(ProtocGenGo) $(ProtocGenGrpcGateway) $(ProtocGenSwagger) $(ProtocGenWeb
 	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/todo/api/v1 todo-service.proto
 	$Q $(Protoc) --proto_path=api/todo/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/todo/swagger/v1 todo-service.proto
 
-	$Q mkdir -p pkg/blog/api/v1
-	$Q mkdir -p api/blog/swagger/v1
-	# gen blog
-	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/blog/api/v1 service.proto
-	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/blog/api/v1 service.proto
-	$Q $(Protoc) --proto_path=api/blog/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/blog/swagger/v1 service.proto
-
 # $Q mkdir -p client
 # $Q $(Protoc) --proto_path=api/proto/v1 --proto_path=third_party --js_out=import_style=typescript:client --grpc-web_out=import_style=commonjs,mode=grpcwebtext:client todo-service.proto
 

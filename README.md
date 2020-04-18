@@ -20,6 +20,7 @@ go-grpc-http-rest-microservice, discovery with consul, grpc-go, grpc-gateway, go
 - https://github.com/amsokol/go-grpc-http-rest-microservice-tutorial
 - https://github.com/golang-standards/project-layout
 
+- [protobuf](https://github.com/protocolbuffers/protobuf/releases)
 - [protocol buffers doc](https://developers.google.com/protocol-buffers/docs/proto3)
 - [protobuf tools](https://github.com/protocolbuffers/protobuf/)
 - [go-sqlmock](https://github.com/DATA-DOG/go-sqlmock)
