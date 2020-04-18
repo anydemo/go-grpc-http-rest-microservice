@@ -52,6 +52,8 @@ services:
       PG_MASTER_HOST: pg_master
     ports:
       - 5434:5432
+    depends_on:
+      - pg_master
     networks:
       default:
         aliases:
@@ -75,13 +77,11 @@ services:
   consul:
     image: consul:1.5
     network_mode: "host"
-
   # jaeger:
   #   image: jaegertracing/all-in-one:latest
   #   ports:
   #     - "6831:6831/udp"
   #     - "16686:16686"
-
   # prometheus:
   #   image: prom/prometheus:v2.1.0
   #   volumes:
@@ -106,12 +106,10 @@ services:
   # #      placement:
   # #        constraints:
   # #          - node.hostname == ${HOSTNAME}
-
   # pushgateway:
   #   image: prom/pushgateway
   #   ports:
   #     - 9091:9091
-
   # node-exporter:
   #   image: prom/node-exporter
   #   volumes:
@@ -128,7 +126,6 @@ services:
   #   networks:
   #     - back-tier
   #   restart: always
-
   # alertmanager:
   #   image: prom/alertmanager
   #   ports:
@@ -157,7 +154,6 @@ services:
   #   networks:
   #     - back-tier
   #   restart: always
-
   # grafana:
   #   image: grafana/grafana
   #   user: "104"

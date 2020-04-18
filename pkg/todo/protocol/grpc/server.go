@@ -8,7 +8,6 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/anydemo/go-grpc-http-rest-microservice/discovery"
 	"github.com/anydemo/go-grpc-http-rest-microservice/logger"
 	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/api/v1"
 	"github.com/anydemo/go-grpc-http-rest-microservice/protocol/grpc/middleware"
@@ -16,14 +15,14 @@ import (
 )
 
 // RegisterToConsul register the service to consul
-func RegisterToConsul() {
-	discovery.RegitserService("localhost:8500", &discovery.ConsulService{
-		Name: "todo_server_grpc",
-		Tag:  []string{"todo", "grpc", "todo_server_grpc"},
-		IP:   "127.0.0.1",
-		Port: 9090,
-	})
-}
+// func RegisterToConsul() {
+// 	discovery.RegitserService("localhost:8500", &discovery.ConsulService{
+// 		Name: "todo_server_grpc",
+// 		Tag:  []string{"todo", "grpc", "todo_server_grpc"},
+// 		IP:   "127.0.0.1",
+// 		Port: 9090,
+// 	})
+// }
 
 // RunServer runs gRPC service to publish ToDo service
 func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v1Healthz grpc_health_v1.HealthServer, port string) error {
@@ -42,7 +41,7 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v1Healthz grpc_h
 	server := grpc.NewServer(opts...)
 	v1.RegisterToDoServiceServer(server, v1API)
 	grpc_health_v1.RegisterHealthServer(server, v1Healthz)
-	RegisterToConsul()
+	// RegisterToConsul()
 	// graceful shutdown
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)

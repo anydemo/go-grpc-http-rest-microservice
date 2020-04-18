@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
 
-	"github.com/anydemo/go-grpc-http-rest-microservice/discovery"
+	// "github.com/anydemo/go-grpc-http-rest-microservice/discovery"
 	v1 "github.com/anydemo/go-grpc-http-rest-microservice/pkg/todo/api/v1"
 )
 
@@ -19,7 +19,7 @@ const (
 )
 
 func main() {
-	discovery.Init()
+	// discovery.Init()
 	// get configuration
 	address := flag.String("server", "", "gRPC server in format host:port")
 	flag.Parse()
